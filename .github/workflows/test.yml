@@ -1,0 +1,80 @@
+name: ParaBank Automation Tests
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    strategy:
+      matrix:
+        node-version: [18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright browsers
+      run: npx playwright install --with-deps chromium
+    
+    - name: Run Cucumber tests
+      run: npm run cucumberTest
+      env:
+        BROWSER: chromium
+        HEADLESS: true
+        PARALLEL_WORKERS: 2
+        CUCUMBER_TAGS: @test
+    
+    - name: Generate HTML Report
+      if: always()
+      run: npm run cucumberReport
+    
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-reports
+        path: |
+          reports/
+          logs/
+          screenshots/
+        retention-days: 30
+    
+    - name: Upload videos
+      if: always()
+      uses: actions/upload-artifact@v3
+      with:
+        name: test-videos
+        path: videos/
+        retention-days: 7
+      continue-on-error: true
+    
+    - name: Comment PR with test results
+      if: github.event_name == 'pull_request' && always()
+      uses: actions/github-script@v6
+      with:
+        script: |
+          const fs = require('fs');
+          const reportPath = 'reports/index.html';
+          if (fs.existsSync(reportPath)) {
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '✅ Test execution completed! Check the Artifacts section for detailed reports.'
+            });
+          }
+      continue-on-error: true

@@ -1,0 +1,28 @@
+{
+  "name": "parabank-automation",
+  "version": "1.0.0",
+  "description": "BDD Automation Framework for ParaBank – Incubyte Assessment",
+  "main": "index.js",
+  "scripts": {
+    "cucumberTest": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report && cucumber-js",
+    "cucumberReport": "node src/utils/generate-html-report.js",
+    "clean": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report screenshots videos traces allure-results allure-report test-results playwright-report"
+  },
+  "keywords": [
+    "BDD",
+    "Cucumber",
+    "Playwright",
+    "Automation"
+  ],
+  "author": "Ankit Tester",
+  "license": "MIT",
+  "dependencies": {
+    "@playwright/test": "^1.44.0",
+    "@cucumber/cucumber": "^10.8.0",
+    "dotenv": "^16.4.5",
+    "rimraf": "^5.0.7"
+  },
+  "devDependencies": {
+    "eslint": "^9.3.0"
+  }
+}
