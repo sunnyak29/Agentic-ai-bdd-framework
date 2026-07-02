@@ -57,7 +57,7 @@ class AccountPage extends BasePage {
     const balances = [];
 
     for (const row of rows) {
-      const cells = await row.locator('.//td').allInnerTexts();
+      const cells = await row.locator('xpath=.//td').allInnerTexts();
       if (cells.length >= 2) {
         const accountId = cells[0].trim();
         const balance = cells[1].trim();
