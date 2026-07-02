@@ -42,16 +42,18 @@ jobs:
       if: always()
       run: npm run cucumberReport
     
+    - name: Create reports directory
+      if: always()
+      run: mkdir -p reports logs screenshots videos
+    
     - name: Upload test results
       if: always()
       uses: actions/upload-artifact@v3
       with:
         name: test-reports
-        path: |
-          reports/
-          logs/
-          screenshots/
+        path: reports/
         retention-days: 30
+      continue-on-error: true
     
     - name: Upload videos
       if: always()

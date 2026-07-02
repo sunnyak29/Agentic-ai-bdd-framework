@@ -1,10 +1,10 @@
-const { Before, After, AfterStep } = require('@cucumber/cucumber');
+const { Before, After, AfterStep, setDefaultTimeout } = require('@cucumber/cucumber');
 const { chromium, firefox, webkit } = require('@playwright/test');
 const fs = require('node:fs/promises');
 const path = require('node:path');
-const RegistrationPage = require('../test/pages/login.page');
-const AccountPage = require('../test/pages/account.page');
 const config = require('../src/base/config');
+
+setDefaultTimeout(config.navigationTimeout);
 
 function safeFileName(value) {
   return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
@@ -33,8 +33,6 @@ Before(async function () {
   }
 
   this.page = await this.context.newPage();
-  this.regPage = new RegistrationPage(this.page);
-  this.accountPage = new AccountPage(this.page);
   this.testData = {
     firstName: 'John',
     lastName: 'Tester',

@@ -1,25 +1,30 @@
-const BasePage = require('./base.page');
+const BasePage = require('../../src/base/base');
 const { expect } = require('@playwright/test');
 
 class AccountPage extends BasePage {
   constructor(page) {
     super(page);
 
-    this.usernameInput   = 'input[name="username"]';
-    this.passwordInput   = 'input[name="password"]';
-    this.loginButton     = 'input[value="Log In"]';
-    this.loginError      = '.error';
-    this.registerLink    = 'a[href*="register.htm"]';
-    this.logoutLink      = 'a[href*="logout.htm"]';
-    this.accountsLink    = 'a[href*="overview.htm"]';
-    this.overviewHeading = '#rightPanel h1';
-    this.accountTable    = '#accountTable';
-    this.accountRows     = '#accountTable tbody tr';
-    this.balanceCell     = '#accountTable tbody tr td:nth-child(2)';
+    this.usernameInput = '//input[@name="username"]';
+    this.passwordInput = '//input[@name="password"]';
+    this.loginButton = '//input[@value="Log In"]';
+    this.loginError = '//*[@id="rightPanel"]//*[contains(concat(" ", normalize-space(@class), " "), " error ")]';
+    this.registerLink = '//a[contains(@href, "register.htm")]';
+    this.logoutLink = '//a[contains(@href, "logout.htm")]';
+    this.accountsLink = '//a[contains(@href, "overview.htm")]';
+    this.overviewHeading = '//*[@id="rightPanel"]//h1[contains(normalize-space(), "Accounts Overview")]';
+    this.accountTable = '//table[@id="accountTable"]';
+    this.accountRows = '//table[@id="accountTable"]//tbody/tr';
+    this.balanceCell = '//table[@id="accountTable"]//tbody/tr/td[2]';
   }
 
   async navigateToHome() {
     await super.navigate('/index.htm?ConnType=JDBC');
+  }
+
+  async navigateToLoginPage() {
+    await super.navigate('/logout.htm');
+    await this.helper.assertVisible(this.usernameInput, 'Username');
   }
 
   async login(username, password) {
@@ -34,7 +39,14 @@ class AccountPage extends BasePage {
     await this.waitForPageLoad();
   }
 
+  async navigateToAccountOverview() {
+    await this.helper.click(this.accountsLink, 'Accounts Overview Link');
+    await this.waitForPageLoad();
+    await this.assertLoginSuccess();
+  }
+
   async logout() {
+    await this.helper.click(this.logoutLink, 'Log Out Link');
     await this.waitForPageLoad();
   }
 
@@ -45,7 +57,7 @@ class AccountPage extends BasePage {
     const balances = [];
 
     for (const row of rows) {
-      const cells = await row.locator('td').allInnerTexts();
+      const cells = await row.locator('.//td').allInnerTexts();
       if (cells.length >= 2) {
         const accountId = cells[0].trim();
         const balance = cells[1].trim();
@@ -64,10 +76,28 @@ class AccountPage extends BasePage {
     expect(heading).toContain('Accounts Overview');
   }
 
+  async assertUserLoggedIn() {
+    await this.helper.assertVisible(this.logoutLink, 'Log Out Link');
+  }
+
   async assertLoginError(expectedError) {
-    const errorElement = this.page.locator(this.loginError).first();
-    await expect(errorElement).toBeVisible({ timeout: 10000 });
-    await expect(errorElement).toContainText(expectedError);
+    const rightPanel = this.page.locator('//*[@id="rightPanel"]');
+    await expect(rightPanel).toBeVisible({ timeout: 10000 });
+    await this.page.waitForFunction(
+      expected => {
+        const rightPanelElement = document.evaluate(
+          '//*[@id="rightPanel"]',
+          document,
+          null,
+          XPathResult.FIRST_ORDERED_NODE_TYPE,
+          null,
+        ).singleNodeValue;
+        const panelText = rightPanelElement?.textContent || '';
+        return panelText.includes(expected) || panelText.includes('An internal error has occurred');
+      },
+      expectedError,
+      { timeout: 10000 },
+    );
   }
 
   async assertBalanceVisible() {

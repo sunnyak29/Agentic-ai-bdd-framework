@@ -1,25 +1,25 @@
-const BasePage = require('./base.page');
+const BasePage = require('../../src/base/base');
 const { expect } = require('@playwright/test');
 
 class RegistrationPage extends BasePage {
   constructor(page) {
     super(page);
 
-    this.firstNameInput    = 'input[id="customer.firstName"]';
-    this.lastNameInput     = 'input[id="customer.lastName"]';
-    this.addressInput      = 'input[id="customer.address.street"]';
-    this.cityInput         = 'input[id="customer.address.city"]';
-    this.stateInput        = 'input[id="customer.address.state"]';
-    this.zipCodeInput      = 'input[id="customer.address.zipCode"]';
-    this.phoneInput        = 'input[id="customer.phoneNumber"]';
-    this.ssnInput          = 'input[id="customer.ssn"]';
-    this.usernameInput     = 'input[id="customer.username"]';
-    this.passwordInput     = 'input[id="customer.password"]';
-    this.confirmInput      = 'input[id="repeatedPassword"]';
-    this.registerButton    = 'input[value="Register"]';
-    this.errorMessage      = '.error';
-    this.successHeading    = '#rightPanel h1';
-    this.welcomeText       = '#rightPanel p';
+    this.firstNameInput = '//input[@id="customer.firstName"]';
+    this.lastNameInput = '//input[@id="customer.lastName"]';
+    this.addressInput = '//input[@id="customer.address.street"]';
+    this.cityInput = '//input[@id="customer.address.city"]';
+    this.stateInput = '//input[@id="customer.address.state"]';
+    this.zipCodeInput = '//input[@id="customer.address.zipCode"]';
+    this.phoneInput = '//input[@id="customer.phoneNumber"]';
+    this.ssnInput = '//input[@id="customer.ssn"]';
+    this.usernameInput = '//input[@id="customer.username"]';
+    this.passwordInput = '//input[@id="customer.password"]';
+    this.confirmInput = '//input[@id="repeatedPassword"]';
+    this.registerButton = '//input[@value="Register"]';
+    this.errorMessage = '//*[contains(concat(" ", normalize-space(@class), " "), " error ")]';
+    this.successHeading = '//*[@id="rightPanel"]//h1';
+    this.welcomeText = '//*[@id="rightPanel"]//p';
   }
 
   async navigate() {
@@ -63,7 +63,7 @@ class RegistrationPage extends BasePage {
 
   async assertValidationErrors() {
     // Check for error messages on form
-    const errors = await this.page.locator('.error').count();
+    const errors = await this.page.locator(this.errorMessage).count();
     expect(errors).toBeGreaterThan(0);
   }
 }

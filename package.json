@@ -6,7 +6,8 @@
   "scripts": {
     "cucumberTest": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report && cucumber-js",
     "cucumberReport": "node src/utils/generate-html-report.js",
-    "clean": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report screenshots videos traces allure-results allure-report test-results playwright-report"
+    "clean": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report screenshots videos traces allure-results allure-report test-results playwright-report",
+    "codegen:feature": "playwright codegen https://parabank.parasoft.com/parabank"
   },
   "keywords": [
     "BDD",

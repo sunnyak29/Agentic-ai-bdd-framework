@@ -9,7 +9,7 @@ const config = {
   navigationTimeout: parseInt(process.env.NAVIGATION_TIMEOUT, 10) || 30000,
   recordVideo: process.env.RECORD_VIDEO === 'true',
   recordTrace: process.env.RECORD_TRACE === 'true',
-  parallelWorkers: parseInt(process.env.PARALLEL_WORKERS, 10) || 2,
+  parallelWorkers: parseInt(process.env.PARALLEL_WORKERS, 10) || 1,
 };
 
 module.exports = config;

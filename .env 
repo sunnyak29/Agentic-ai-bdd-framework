@@ -12,17 +12,15 @@ TIMEOUT=10000
 NAVIGATION_TIMEOUT=30000
 
 # ─── VIDEO RECORDING ────────────────────────────────────────────────────────
-RECORD_VIDEO=false
-
-# ─── TRACE RECORDING ───────────────────────────────────────────────────────
-RECORD_TRACE=false
+RECORD_VIDEO=true
+RECORD_TRACE=true
 
 # ─── PARALLEL WORKERS ───────────────────────────────────────────────────────
 PARALLEL_WORKERS=2
 
 # ─── CUCUMBER TAGS (leave empty to run all) ─────────────────────────────────
 # Examples: @smoke, @regression, @test etc.
-CUCUMBER_TAGS=@test
+CUCUMBER_TAGS=@test1
 
 # ─── APPLICATION URL ────────────────────────────────────────────────────────
 BASE_URL=https://parabank.parasoft.com/parabank

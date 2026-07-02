@@ -1,5 +1,5 @@
-const PlaywrightHelper = require('../../src/utils/playwright.helper');
-const config = require('../../src/base/config');
+const PlaywrightHelper = require('../utils/playwright.helper');
+const config = require('./config');
 
 class BasePage {
   constructor(page) {
