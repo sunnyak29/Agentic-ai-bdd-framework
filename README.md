@@ -1,50 +1,98 @@
 # BDD Automation Framework
 
-Cucumber BDD automation framework using Playwright and Javascript .
+Cucumber BDD Agentic AI Automation Framework using Playwright and JavaScript.
+
+## Project Status
+
+This project is currently under active development.
+
+### ✅ Completed
+- Playwright + Cucumber BDD framework
+- Page Object Model (POM)
+- Reusable Playwright Helper
+- HTML Reporting
+- Cross-browser support
+- Environment-based configuration
+
+### 🚧 In Progress
+- Agentic AI Planner
+- AI Test Generator
+- AI Test Healer
+- Jira & Confluence integration
+- Xray integration
+- Advanced reporting
 
 ## Project Overview
 
-This repository contains a BDD test framework that automates common user journeys on the ParaBank demo application:
-- User registration
-- User login
-- Account balance retrieval
-- Error handling and validation
+This repository contains an **enterprise-grade Agentic AI BDD automation framework** built using **Playwright**, **Cucumber**, and **JavaScript**. The framework follows the **Page Object Model (POM)** design pattern .
 
-Tech stack:
-- Playwright (browser automation)
-- Cucumber (@cucumber/cucumber) for BDD feature files
-- Node.js (JavaScript)
+The framework is designed to support both traditional test automation and AI-assisted QA workflows through reusable framework components, centralized helper utilities, and modular architecture.
+
+### Key Features
+
+- Cucumber BDD with Gherkin feature files
+- Playwright for modern cross-browser automation
+- JavaScript (Node.js)
 - Page Object Model (POM)
+- Reusable Playwright Helper Library
+- Centralized Base Page architecture
+- Environment-based configuration using `.env`
+- Cross-browser execution (Chromium, Firefox, WebKit)
+- Parallel test execution
+- HTML reporting
+- Screenshot, video, and trace capture
+- Modular and scalable framework design
+- Easy integration with CI/CD pipelines
+- Agentic AI-ready architecture for intelligent test planning, automation generation, and self-healing capabilities
+
 
 ---
 
 ## Project Structure
+## Project Structure
 
-```
-parabank-automation/
+```text
+agentic-ai-bdd-framework/
 ├── src/
 │   ├── base/
-│   │   └── config.js                # Configuration loader (reads .env)
+│   │   ├── base.page.js                 # Base page with shared functionality
+│   │   └── config.js                    # Configuration loader (.env)
+│   │
+│   ├── helpers/
+│   │   └── playwright.helper.js         # Reusable Playwright helper methods
+│   │
+│   ├── pages/
+│   │   ├── login.page.js
+│   │   ├── dashboard.page.js
+│   │   └── ...
+│   │
 │   └── utils/
-│       ├── generate-html-report.js  # Report generator for artifacts
-│       └── playwright.helper.js     # Playwright helper wrappers
+│       └── generate-html-report.js      # HTML report generator
+│
 ├── test/
 │   ├── features/
-│   │   └── parabank.feature         # Gherkin feature file(s)
-│   ├── steps/
-│   │   └── parabank.steps.js        # Step definitions
-│   └── pages/
-│       ├── base.page.js             # Base page object (uses helper)
-│       ├── login.page.js            # Registration page object
-│       └── account.page.js          # Account page object
+│   │   ├── login.feature
+│   │   ├── dashboard.feature
+│   │   └── ...
+│   │
+│   └── steps/
+│       ├── login.steps.js
+│       ├── dashboard.steps.js
+│       └── ...
+│
 ├── support/
-│   └── hooks.js                     # Cucumber hooks (screenshots, traces, videos)
-├── reports/                          # Test artifacts and generated reports (runtime)
-├── cucumber.js                       # Cucumber CLI configuration
-├── package.json                      # Scripts and dependencies
+│   └── hooks.js                         # Cucumber hooks (screenshots, videos, traces)
+│
+├── reports/                             # Test reports and execution artifacts
+├── screenshots/                         # Failure screenshots
+├── videos/                              # Recorded execution videos
+├── traces/                              # Playwright trace files
+│
+├── .env.example                         # Environment configuration template
+├── cucumber.js                          # Cucumber configuration
+├── package.json                         # Project dependencies and scripts
 └── README.md
 ```
-
 ---
 
 ## Configuration (.env)

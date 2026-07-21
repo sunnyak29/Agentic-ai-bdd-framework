@@ -13,4 +13,5 @@ playwright-report/
 .idea/
 *.swp
 *.swo
+*.playwright-mcp/
 *~

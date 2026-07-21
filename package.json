@@ -1,26 +1,32 @@
 {
-  "name": "parabank-automation",
+  "name": "agentic-ai-bdd-framework",
   "version": "1.0.0",
-  "description": "BDD Automation Framework for ParaBank – Incubyte Assessment",
+  "description": " Agentic AI BDD Automation Framework using Playwright, Cucumber, and JavaScript.",
   "main": "index.js",
   "scripts": {
     "cucumberTest": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report && cucumber-js",
     "cucumberReport": "node src/utils/generate-html-report.js",
-    "clean": "rimraf reports/cucumberReport reports/videos reports/traces reports/playwright-report screenshots videos traces allure-results allure-report test-results playwright-report",
-    "codegen:feature": "playwright codegen https://parabank.parasoft.com/parabank"
+    "clean": "rimraf reports screenshots videos traces allure-results allure-report test-results playwright-report",
+    "codegen": "playwright codegen"
   },
   "keywords": [
-    "BDD",
-    "Cucumber",
-    "Playwright",
-    "Automation"
+    "playwright",
+    "cucumber",
+    "bdd",
+    "javascript",
+    "automation",
+    "testing",
+    "agentic-ai",
+    "qa"
   ],
-  "author": "Ankit Tester",
+  "author": "Ankit Kumar <sunnyak29@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@playwright/test": "^1.44.0",
     "@cucumber/cucumber": "^10.8.0",
+    "@playwright/test": "^1.44.0",
     "dotenv": "^16.4.5",
+    "jsdom": "^29.1.1",
+    "mcp-atlassian": "^2.1.0",
     "rimraf": "^5.0.7"
   },
   "devDependencies": {

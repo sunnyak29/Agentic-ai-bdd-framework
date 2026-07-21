@@ -1,0 +1,24 @@
+{
+  "servers": {
+    "playwright-test": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "playwright",
+        "run-test-mcp-server"
+      ]
+    },
+    "atlassian": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "mcp-atlassian"
+      ],
+      "env": {
+"ATLASSIAN_BASE_URL": "https://oltbank.atlassian.net",
+        "ATLASSIAN_EMAIL": "sunnyak29@gmail.com",
+        "ATLASSIAN_API_TOKEN": ""
+      }
+    }
+  }
+}

@@ -7,7 +7,10 @@ const config = require('../src/base/config');
 setDefaultTimeout(config.navigationTimeout);
 
 function safeFileName(value) {
-  return value.replace(/[^a-z0-9]+/gi, '-').replace(/^-|-$/g, '').toLowerCase();
+  return String(value || 'scenario')
+    .replace(/[^a-z0-9]+/gi, '-')
+    .replace(/^-|-$/g, '')
+    .toLowerCase();
 }
 
 Before(async function () {
@@ -48,38 +51,58 @@ Before(async function () {
 AfterStep(async function ({ pickleStep }) {
   if (!this.page || this.page.isClosed()) return;
 
-  const screenshot = await this.page.screenshot({ fullPage: true });
-  await this.attach(screenshot, {
-    mediaType: 'image/png',
-    fileName: `${safeFileName(pickleStep.text)}.png`,
-  });
+  try {
+    const screenshot = await this.page.screenshot({ fullPage: true });
+    await this.attach(screenshot, {
+      mediaType: 'image/png',
+      fileName: `${safeFileName(pickleStep.text)}.png`,
+    });
+  } catch (error) {
+    console.warn(`Screenshot skipped for step: ${pickleStep.text}. ${error.message}`);
+  }
 });
 
 After(async function (scenario) {
-  const video = config.recordVideo && this.page ? this.page.video() : null;
+  try {
+    const video = config.recordVideo && this.page && !this.page.isClosed() ? this.page.video() : null;
 
-  if (config.recordTrace && this.context) {
-    await fs.mkdir('reports/traces', { recursive: true });
-    const tracePath = path.join(
-      'reports/traces',
-      `${safeFileName(scenario.pickle.name)}-${Date.now()}.zip`,
-    );
-    await this.context.tracing.stop({ path: tracePath });
-    await this.attach(await fs.readFile(tracePath), {
-      mediaType: 'application/zip',
-      fileName: path.basename(tracePath),
-    });
+    if (config.recordTrace && this.context) {
+      await fs.mkdir('reports/traces', { recursive: true });
+      const tracePath = path.join(
+        'reports/traces',
+        `${safeFileName(scenario.pickle.name)}-${Date.now()}.zip`,
+      );
+      await this.context.tracing.stop({ path: tracePath });
+      await this.attach(await fs.readFile(tracePath), {
+        mediaType: 'application/zip',
+        fileName: path.basename(tracePath),
+      });
+    }
+
+    if (this.context) {
+      await this.context.close();
+    }
+
+    if (video) {
+      const videoPath = await video.path();
+      await this.attach(await fs.readFile(videoPath), {
+        mediaType: 'video/webm',
+        fileName: path.basename(videoPath),
+      });
+    }
+  } catch (error) {
+    console.warn(`Cleanup warning: ${error.message}`);
+  } finally {
+    if (this.page && !this.page.isClosed()) {
+      await this.page.close().catch(() => {});
+    }
+
+    if (this.context) {
+      await this.context.close().catch(() => {});
+    }
+
+    if (this.browser) {
+      await this.browser.close().catch(() => {});
+    }
   }
-
-  if (this.context) await this.context.close();
-
-  if (video) {
-    const videoPath = await video.path();
-    await this.attach(await fs.readFile(videoPath), {
-      mediaType: 'video/webm',
-      fileName: path.basename(videoPath),
-    });
-  }
-
-  if (this.browser) await this.browser.close();
 });
