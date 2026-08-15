@@ -9,16 +9,16 @@ This project is currently under active development.
 ### ✅ Completed
 - Playwright + Cucumber BDD framework
 - Page Object Model (POM)
-- Reusable Playwright Helper
-- HTML Reporting
 - Cross-browser support
-- Environment-based configuration
+- Jira & Confluence integration
 
 ### 🚧 In Progress
+- Environment-based configuration
+- Reusable Playwright Helper
+- HTML Reporting
 - Agentic AI Planner
 - AI Test Generator
 - AI Test Healer
-- Jira & Confluence integration
 - Xray integration
 - Advanced reporting
 
